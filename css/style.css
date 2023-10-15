@@ -3,5 +3,37 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    background-color: #FCF0CC;
+    font-family: 'Kanit', sans-serif;;
 }
 
+#nav-bar {
+    width: 100vw;
+    height: 5vh;
+    background-color: #1B2432;
+    display: flex;
+    justify-content: space-around;
+}
+
+.nav-boxes {
+    color: white;
+    width: 20%;
+    height: 80%;
+    margin-top: 5px;
+    background-color: transparent;
+}
+
+a {
+    background-color: transparent;
+    color: white;
+    text-decoration: none;
+}
+
+#container-work-in-progress{
+    width: 100%;
+    height: 100%;
+}
+
+#working {
+    margin: 30%;
+}
