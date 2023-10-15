@@ -3,24 +3,29 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: #FCF0CC;
     font-family: 'Kanit', sans-serif;;
 }
 
+body {
+    background-color: #FCF0CC;
+
+}
+
 #nav-bar {
-    width: 100vw;
-    height: 5vh;
+    width: 100%;
+    height: 8vh;
     background-color: #1B2432;
     display: flex;
     justify-content: space-around;
 }
 
 .nav-boxes {
+    text-align: center;
     color: white;
-    width: 20%;
-    height: 80%;
-    margin-top: 5px;
+    flex-basis: 25%;
+    height: 100%;
     background-color: transparent;
+    border: 2px solid white;
 }
 
 a {
@@ -28,6 +33,12 @@ a {
     color: white;
     text-decoration: none;
 }
+
+/* h4{
+    margin-top: 50%;
+    transform: translateY(-50%);
+
+} */
 
 #container-work-in-progress{
     width: 100%;
@@ -37,3 +48,14 @@ a {
 #working {
     margin: 30%;
 }
+
+#win-count, #logout-nav, #username-nav {
+    flex-basis: 10%;
+
+}
+
+
+#home-link{
+    flex-grow: 1;
+}
+
