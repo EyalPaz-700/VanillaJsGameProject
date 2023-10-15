@@ -1,5 +1,4 @@
 * {
-    font-family: 'Kanit', sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -8,7 +7,6 @@
 
 body {
     background-color: #FCF0CC;
-
 }
 
 #nav-bar {
@@ -17,6 +15,7 @@ body {
     background-color: #1B2432;
     display: flex;
     justify-content: space-around;
+    /* position: fixed; */
 }
 
 .nav-boxes {
