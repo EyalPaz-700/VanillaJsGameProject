@@ -9,21 +9,16 @@
     flex-wrap: wrap;
     width: 80vw;
     height: 90vh;
-    /* border: 1px solid black; */
     border-radius: 10%;
-    /* background-color: #FCF0CC; */
     justify-content: space-between;
     margin: auto;
 }
 
 .game {
-    /* background-color: white; */
     width: 15%;
     height: 20%;
-    /* border: 1px solid black; */
     margin: 3%;
     border-radius: 10%;
-    /* align-items: center; */
 }
 
 .game-image {
