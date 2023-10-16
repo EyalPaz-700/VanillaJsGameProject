@@ -1,13 +1,12 @@
 const board = document.querySelector('.board')
 
 
-const whiteCircle = "../media/black-circle.svg"
-const blackCircle = "../media/circle-15.svg"
+const whiteCircle = "../media/white-circle.svg"
+const blackCircle = "../media/black-circle.svg"
 
 let moveCount = 0
 let routes = []
-
-
+let activePiece = null
 
 function initBoard(){
     for (let i = 0; i < 9; ++i){
@@ -53,12 +52,9 @@ function initBoard(){
 function checkValidity(func) {
     return function() {
         
-        if ((this.firstElementChild.src.includes('black') && moveCount % 2 === 0) ||
-            (this.firstElementChild.src.includes('15') && moveCount % 2 === 1)) {
-
-            document.querySelectorAll('.available-move').forEach( e => {
-                e.classList.remove('available-move')
-            })
+        if ((this.firstElementChild.src.includes('white') && moveCount % 2 === 0) ||
+            (this.firstElementChild.src.includes('black') && moveCount % 2 === 1)) {
+            resetAvailableMoves()
             func.apply(this, arguments);
         }
     };
@@ -67,8 +63,8 @@ function checkValidity(func) {
 
 function getColor(row, column){
     const cell = document.querySelector(`#cell-${row}-${column}`)
-    if (!checkEmptyCell(column,row)){
-        if (cell.firstElementChild.src === blackCircle){
+    if (!checkEmptyCell(row,column)){
+        if (cell.firstElementChild.src.includes('black')){
             return 'black'
         }
         return 'white'
@@ -79,7 +75,7 @@ function getColor(row, column){
 function checkEmptyCell(row,column) {
    if (isValidMove(row,column)) { 
     const src = getPiece(row,column).firstElementChild.src
-        return  src === 'http://127.0.0.1:5500/html/' || src === ''
+        return  src === 'http://127.0.0.1:5500/html/checkers.html' || src === ''
    }
 }
 
@@ -91,20 +87,94 @@ function getLocation(piece){
     return  piece.id.split('-').slice(1,3).map( x => parseInt(x))
 }
 
+function distanceFromPiece(piece1,piece2){
+    const location1 = getLocation(piece1)
+    const location2 = getLocation(piece2)
+    return (Math.sqrt(Math.pow(location1[0] - location2[0],2) + Math.pow(location1[1] - location2[1],2)))
+}
+
 function getPiece(row,column){
     return document.querySelector(`#cell-${row}-${column}`)
 }
 
-function availableMoves() {
-    routes = []
+function getLocationOurForm(location){
+    return [parseInt(location / 10),location % 10]
+}
+function resetAvailableMoves(){
+    document.querySelectorAll('.available-move').forEach( e => {
+        e.classList.remove('available-move')
+    })
+}
+
+function resetOnClicks(){
+    routes.forEach(route => {
+        const lastPieceOfRoute = getPiece(parseInt(route[route.length - 1] / 10),route[route.length - 1] % 10)
+        if (lastPieceOfRoute !== activePiece){
+        lastPieceOfRoute.onclick = checkValidity(movePiece)}
+    })
+}
+
+function movePiece(){
+    availableMoves(this)
     const location = getLocation(this)
     const row = location[0]
     const column = location[1]
+    routes.forEach(route => {
+        const lastPieceOfRoute = getPiece(parseInt(route[route.length - 1] / 10),route[route.length - 1] % 10)
+        lastPieceOfRoute.classList.add('available-move')
+        if (distanceFromPiece(this,lastPieceOfRoute) > Math.sqrt(2) ){
+        lastPieceOfRoute.onclick = () => {
+            moveCount++;
+            route.slice(0,route.length).forEach( (pieceInRoute,index) => {
+                if (index === 0) {
+                    pieceInRoute = getPiece( (parseInt(pieceInRoute / 10) + row) / 2, (pieceInRoute % 10 + column) / 2)
+                }
+                else {
+                    debugger
+                    pieceInRoute = getPiece((getLocationOurForm(pieceInRoute)[0] + getLocationOurForm(route[index-1])[0]) / 2, (getLocationOurForm(pieceInRoute)[1] + getLocationOurForm(route[index-1])[1]) / 2)
+                }
+                pieceInRoute.firstElementChild.src = ' '
+                pieceInRoute.onclick = null
+             
+            }
+            )
+            activePiece = lastPieceOfRoute
+            activePiece.firstElementChild.src = this.firstElementChild.src
+            activePiece.onclick = this.onclick
+            this.firstElementChild.src = ' '
+            this.onclick = null
+            resetAvailableMoves()
+            resetOnClicks()
+        }
+    }
+        else {
+            lastPieceOfRoute.onclick = () => {
+            moveCount++;
+            lastPieceOfRoute.onclick = this.onclick
+            lastPieceOfRoute.firstElementChild.src = this.firstElementChild.src
+            this.onclick = null
+            this.firstElementChild.src = ' '
+            resetAvailableMoves()
+            resetOnClicks()
+            }
+        }
+ }
+    )
+
+}
+
+function availableMoves(piece) {
+    routes = []
+    const location = getLocation(piece)
+    const row = location[0]
+    const column = location[1]
+    let previousRow = row
+    let previousColumn = column
     if (getColor(row,column) === 'black'){
         if (checkEmptyCell(row + 1,column + 1)) {
             routes.push([(row + 1 )* 10 + column + 1])
         }
-        if (checkEmptyCell((row + 1,column - 1))) {
+        if (checkEmptyCell(row + 1,column - 1)) {
             routes.push([(row + 1 )* 10 + column - 1])
         }
         canEat(row+2,column+2)
@@ -123,24 +193,26 @@ function availableMoves() {
     }
 
     function canEat(newRow,newColumn,route = []) {
-            if (route.includes((row + 1 )* 10 + column + 1)){
+
+            if (route.includes((newRow)* 10 + newColumn)){
                 return
             }
-            if (checkEmptyCell(newRow,newColumn) && !checkEmptyCell(row,column) && !checkEmptyCell((newRow + row) / 2, (column + newColumn) / 2) && (getColor(row,column) !== getColor( (newRow + row) / 2, (column + newColumn) / 2))){
-                route.push(newRow,newColumn)
+            if (checkEmptyCell(newRow,newColumn) && !checkEmptyCell((newRow + previousRow) / 2, (previousColumn + newColumn) / 2) && (getColor(row,column) !== getColor( (newRow + previousRow) / 2, (previousColumn + newColumn) / 2))){
+                route.push(newRow* 10 + newColumn)
                 routes.push(route)
-                    canEat(row+2,column+2,route)
-                    canEat(row+2,column-2,route)
-                    canEat(row-2,column-2,route)
-                    canEat(row-2,column+2,route)
+                previousColumn = newColumn
+                previousRow = newRow
+                canEat(newRow+2,newColumn+2,[...route])
+                canEat(newRow+2,newColumn-2,[...route])
+                canEat(newRow-2,newColumn-2,[...route])
+                canEat(newRow-2,newColumn+2,[...route])
             }
     }
-   
 }
 
 initBoard()
 
 const pieces = document.querySelectorAll('.piece')
 pieces.forEach((piece) => {
-    piece.onclick = checkValidity(availableMoves)
+    piece.onclick = checkValidity(movePiece)
 })
