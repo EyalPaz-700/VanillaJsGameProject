@@ -1,4 +1,4 @@
-const board = document.querySelector('.board')
+let board = document.querySelector('.board')
 
 
 const whiteCircle = "../media/white-circle.svg"
@@ -9,6 +9,9 @@ let routes = []
 let activePiece = null
 
 function initBoard(){
+    const div = document.createElement('div')
+    div.classList.add('game-started')
+    board.appendChild(div)
     for (let i = 0; i < 9; ++i){
         let tempRow = document.createElement('tr')
         tempRow.classList.add('row')
@@ -150,6 +153,7 @@ function movePiece(){
             this.onclick = null
             resetAvailableMoves()
             resetOnClicks()
+            checkEndGame()
         }
     }
         else {
@@ -162,6 +166,8 @@ function movePiece(){
             this.firstElementChild.src = ' '
             resetAvailableMoves()
             resetOnClicks()
+            checkEndGame()
+
             }
         }
  }
@@ -243,19 +249,81 @@ function checkEndGame() {
 }
 
 function gameEnd() {
-    const message = document.querySelector('#gameEnded')
+    const message = document.querySelector('.game-started')
         if (moveCount % 2 == 0) {
-            message.style.display = "inline";
+            message.classList.remove('game-started')
+            message.classList.add('game-ended')
             message.textContent += "white wins";
+            increaseScore('white',1)
         } else {
             message.textContent += "black wins";
+            increaseScore('black',1)
+
         }
 
 }
 
-initBoard()
 
-const pieces = document.querySelectorAll('.piece')
+
+function getUser(){
+    const users = JSON.parse(localStorage.getItem('users'))
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    indexUser = undefined;
+    users.forEach( (user,index) =>{
+        if (user.username === currentUser.username){
+            indexUser = index
+        }
+    })
+
+    return indexUser
+}
+function getScore(color){
+    return JSON.parse(localStorage.getItem('users'))[getUser()][`#${color}-win-count`]
+}
+
+function increaseScore(color, amount = 0){
+    const scoreElement = document.querySelector(`#${color}-win-count`)
+    const score = scoreElement.textContent.trim().split(':')
+    scoreElement.textContent = score[0] + ': ' +  (parseInt(score[1].trim())+amount)
+    let currentUserIndex = getUser()
+    const users = JSON.parse(localStorage.getItem('users'))
+    const user = users[currentUserIndex]
+    user[`${color}WinCount`]+= amount
+    localStorage.setItem('users',JSON.stringify(users))
+}
+
+
+function setInitialScores(){
+    increaseScore('black',getScore('black'))
+    increaseScore('white',getScore('white'))
+}
+
+function resetBoard(){
+    document.querySelector('.game').removeChild(document.querySelector('.board'))
+    board = document.createElement('div')
+    board.classList.add('board')
+    document.querySelector('.game').appendChild(board)
+    initBoard()
+    initOnClicks()
+    moveCount = 0
+
+}
+
+function initOnClicks(){
+    debugger
+    const pieces = document.querySelectorAll('.piece')
 pieces.forEach((piece) => {
     piece.onclick = checkValidity(movePiece)
 })
+}
+
+function gameStart(){
+    initBoard()
+    setInitialScores()
+    initOnClicks()
+    moveCount = 0
+    const resetGame = document.getElementById('reset-game')
+    resetGame.addEventListener('click', resetBoard)
+}
+
+gameStart()

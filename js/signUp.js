@@ -89,7 +89,7 @@ function checkIfUserExist(username,email) {
 
 function addUser(username,email,password){
     const users = JSON.parse(localStorage.getItem('users')) ? JSON.parse(localStorage.getItem('users')) : []
-    users.push({"username" : username, "password" : password, "email" :email })
+    users.push({"username" : username, "password" : password, "email" :email , "blackWinCount" : 0, "whiteWinCount" : 0})
     localStorage.setItem("users",JSON.stringify(users))
 }
 

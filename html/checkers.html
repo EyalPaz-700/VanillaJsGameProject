@@ -16,15 +16,31 @@
         <div class="nav-boxes" id="logout-nav"> <h4> Logout </h4> </div>
         <div class="nav-boxes" id="home-link"> <a href="/"> Home Page</a></div>
     </nav>
-    <p id="gameEnded">
-
-    </p>
     <h1>
         Checkers
     </h1>
+    
+
+    <div class="game">
+    <div class="checkers-menu">
+         <h2 id="black-win-count">
+            Black Win Count : 0
+         </h2>
+         <h2 id="white-win-count">
+            White Win Count : 0
+         </h2>
+         <button id="reset-game">
+            Reset Game
+         </button>
+    </div>
+
     <div class="board">
+        <div class="game-started">
+        </div>
         
     </div>
+</div>
+        
     <script src="../js/checkers.js">
     </script>
     <script src="../js/app.js">

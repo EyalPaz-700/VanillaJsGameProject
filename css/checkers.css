@@ -15,9 +15,8 @@ h1 {
 .board {
    position: relative;
    height: 75vh;
-   width : 50vw;
-   left: 50%;
-   transform: translateX(-55%);
+   flex-basis : 50vw;
+   /* transform: translateX(-55%); */
    background-color: #FCF0CC;
 }
 .cell img {
@@ -29,16 +28,6 @@ h1 {
     font-size: xx-large;
     border-width: 0 ;
 }
-
-#gameEnded {
-    position: absolute;
-    top: 60%;
-    right: 50%;
-    z-index: 1;
-    font-size: 2rem;
-    color: white;
-    display: none;
-  }
 
 .piece.clicked img {
     transform: translateY(-10px);
@@ -60,6 +49,57 @@ h1 {
     height: 100%;
     border : 1px solid black;
     text-align: center;
+}
+.checkers-menu{
+    width: 15%;
+    height: 25vh;
+    margin-left: 3%;
+    border: 4px solid #1B2432;;
+    margin-top: 50px;
+    position: relative;
+    
+}
+.game {
+    flex-direction: row;
+    display: flex;
+    width: 100%;
+    column-gap: 8%;
+}
+
+.checkers-menu h2{
+    padding-top: 5%;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+#reset-game{
+    width: 60%;
+    height: 30%;
+    font-size: 1.2rem;
+    position: absolute;
+    left:50%;
+    margin-top: 10%;
+    background-color: #1B2432;
+    color :white;
+    transform: translateX(-50%);
+}
+
+.game-started{
+    display: none;
+}
+
+.game-ended input{
+    display: block;
+}
+.game-ended{
+    position:absolute;
+    display: block;
+    left: 55%;
+    top: 55%;
+    color: #FCF0CC;
+    background-color: #1B2432;
+    transform: translate(-50%,-50%);
+    font-size: 4rem;
 }
 
 .row .cell.colored:nth-of-type(odd) {
