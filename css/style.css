@@ -9,6 +9,10 @@ body {
     background-color: #FCF0CC;
 }
 
+#username-nav h4{
+    display: inline;
+}
+
 #nav-bar {
     width: 100%;
     height: 8vh;
@@ -34,7 +38,7 @@ a {
     text-decoration: none;
 }
 
-h4, .nav-boxes a{
+.nav-boxes h4, .nav-boxes a{
     position: absolute;
   top: 50%;
   left: 50%;

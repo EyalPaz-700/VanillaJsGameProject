@@ -115,6 +115,7 @@ function resetOnClicks(){
 }
 
 function movePiece(){
+    resetOnClicks()
     availableMoves(this)
     const location = getLocation(this)
     const row = location[0]
