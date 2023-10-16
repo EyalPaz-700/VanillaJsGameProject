@@ -31,14 +31,15 @@ function initBoard(){
         else {
             tempCell.classList.add('colored')
             tempCell.appendChild(document.createElement("img"))
-            tempCell.classList.add('piece')
             if (i >= 6){
                 if ((i % 2 === 0 && j % 2 === 1) || (i % 2 === 1 && j % 2 === 0) ){
+                    tempCell.classList.add('piece')
                     tempCell.firstElementChild.src = whiteCircle
                 }
             }
             if (i<=3){
                 if ((i % 2 === 0 && j % 2 === 1) || (i % 2 === 1 && j % 2 === 0) ){
+                    tempCell.classList.add('piece')
                     tempCell.firstElementChild.src = blackCircle
                 }
             }
@@ -104,6 +105,7 @@ function resetAvailableMoves(){
     document.querySelectorAll('.available-move').forEach( e => {
         e.classList.remove('available-move')
     })
+    document.querySelectorAll('.clicked').forEach(el => {el.classList.remove('clicked')})
 }
 
 function resetOnClicks(){
@@ -117,6 +119,7 @@ function resetOnClicks(){
 function movePiece(){
     resetOnClicks()
     availableMoves(this)
+    this.classList.add('clicked')
     const location = getLocation(this)
     const row = location[0]
     const column = location[1]
@@ -131,17 +134,18 @@ function movePiece(){
                     pieceInRoute = getPiece( (parseInt(pieceInRoute / 10) + row) / 2, (pieceInRoute % 10 + column) / 2)
                 }
                 else {
-                    debugger
                     pieceInRoute = getPiece((getLocationOurForm(pieceInRoute)[0] + getLocationOurForm(route[index-1])[0]) / 2, (getLocationOurForm(pieceInRoute)[1] + getLocationOurForm(route[index-1])[1]) / 2)
                 }
                 pieceInRoute.firstElementChild.src = ' '
                 pieceInRoute.onclick = null
+                pieceInRoute.classList.remove('piece')
              
             }
             )
             activePiece = lastPieceOfRoute
             activePiece.firstElementChild.src = this.firstElementChild.src
             activePiece.onclick = this.onclick
+            activePiece.classList.add('piece')
             this.firstElementChild.src = ' '
             this.onclick = null
             resetAvailableMoves()
@@ -152,6 +156,7 @@ function movePiece(){
             lastPieceOfRoute.onclick = () => {
             moveCount++;
             lastPieceOfRoute.onclick = this.onclick
+            lastPieceOfRoute.classList.add('piece')
             lastPieceOfRoute.firstElementChild.src = this.firstElementChild.src
             this.onclick = null
             this.firstElementChild.src = ' '
@@ -162,6 +167,17 @@ function movePiece(){
  }
     )
 
+}
+
+function queenMove(){
+    const location = getLocation(this)
+    const color = getColor(this)
+    const row = location[0]
+    const column = location[1]
+    routes = []
+    for (let i = row, j = column; i < 9 && j < 9; ++i, ++j){
+        
+    }
 }
 
 function availableMoves(piece) {
@@ -209,6 +225,32 @@ function availableMoves(piece) {
                 canEat(newRow-2,newColumn+2,[...route])
             }
     }
+}
+
+function checkEndGame() {
+    let countBlack = 0;
+    let countWhite = 0;
+    for (let i = 1; i <= 8; i++) {
+        for (let j = 1; j <= 8; j++) {
+            if (getColor(i, j) === 'black') {
+                countBlack++;
+            } else if (getColor(i, j) === 'white') {
+                countWhite++;
+            }
+        }
+    }
+    if (countWhite === 0 || countBlack == 0) {gameEnd()};
+}
+
+function gameEnd() {
+    const message = document.querySelector('#gameEnded')
+        if (moveCount % 2 == 0) {
+            message.style.display = "inline";
+            message.textContent += "white wins";
+        } else {
+            message.textContent += "black wins";
+        }
+
 }
 
 initBoard()

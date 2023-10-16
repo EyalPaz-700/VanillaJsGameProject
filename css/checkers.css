@@ -30,6 +30,24 @@ h1 {
     border-width: 0 ;
 }
 
+#gameEnded {
+    position: absolute;
+    top: 60%;
+    right: 50%;
+    z-index: 1;
+    font-size: 2rem;
+    color: white;
+    display: none;
+  }
+
+.piece.clicked img {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.5);
+  }
+  
+  .piece img{
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
 .row {
     display: flex;
     flex-wrap : wrap;
