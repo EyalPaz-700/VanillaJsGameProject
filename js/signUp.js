@@ -1,4 +1,4 @@
-const submit = document.getElementById('submit')
+const submit = document.getElementById('submit-signup')
 const password = document.getElementById('password')
 const username = document.getElementById('username')
 const email = document.getElementById('email')

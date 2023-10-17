@@ -2,6 +2,7 @@
     margin-top: 3vh;
     margin-bottom: 3vh;
     text-align: center;
+    font-size: 3vw;
 }
 
 #game-container {
@@ -31,19 +32,17 @@
     margin: 3%;
     padding: 10%;
     text-align: center;
-    font-size: 1.5vw;
+    font-size: 1.2vw;
 }
 
-@media only screen and (max-width: 850px) {
-    .game {
-        width: 25%;
-        height: 20%;
-        margin: 3%;
-        border-radius: 10%;
+@media only screen and (min-width: 601px) and (max-width: 850px) {
+    #games {
+        font-size: 4.5vw;
     }
 
-    #games {
-        font-size: 3rem;
+    .game {
+        width: 25%;
+        height: 30%;
     }
 
     #game-container {
@@ -53,13 +52,20 @@
 
     .game-name {
         padding: 5%;
-        font-size: 1.2rem;
+        font-size: 1rem;
     }
   }
 
 @media only screen and (max-width: 600px) {
+    #games {
+        font-size: 6vw;
+    }
     .game {
-        width: 35%;
+        width: 25%;
         height: 30%;
+    }
+    .game-name {
+        padding: 5%;
+        font-size: 1rem;
     }
   }

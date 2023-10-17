@@ -8,10 +8,12 @@ body{
 }
 h1{
     margin-bottom: 2%;
+    font-size: 4vw;
 
 }
 h3 {
     margin-bottom: 0.5%;
+    font-size: 2vw;
 }
 form div {
     width: 100%;
@@ -27,7 +29,7 @@ form {
 
 input[type="button"], button {
     color : #FCF0CC;
-    width: 30%;
+    width: 50%;
     height: 100%;
     background-color: #465362;
     margin: 2%
@@ -37,7 +39,7 @@ input[type="button"], button {
 form div input{
     display: inline-block;
     width: fit-content;
-    height: 3vh;
+    height: 4vh;
 
 }
 form div div:nth-child(3) h4{
@@ -64,6 +66,13 @@ form div div div {
 #form-container {
     margin-top: 10vh;
 }
+#signed {
+    font-size: 1.5rem;
+
+}
+#submit-signup{
+    min-width: 50%;
+}
 
 #signed a{
     color: black;
@@ -72,9 +81,9 @@ form div div div {
 
 
 @media only screen and (max-width: 850px) {
-    input[type="button"], button {
-        font-size: 1.5rem;
-        min-width: 70%;
+   #submit, button {
+        font-size: 1rem;
+        min-width: 50%;
     }
 
     h1 {
@@ -86,46 +95,40 @@ form div div div {
     }
 
     input[type="text"], input[type="password"] {
-        font-size: 1.5rem;
-        max-width: 70%;
+        font-size: 1rem;
+        max-width: 60%;
         padding-bottom: 5px;
+    }
+    #signed {
+        font-size: 1rem;
+    }
+    #submit-signup{
+        min-width: 80%;
+    }
+    h3 {
+        font-size: 2.5vw;
     }
 
 }
 
 
 @media only screen and (max-width: 600px) {
-    input[type="button"], button {
-        font-size: 0.9rem;
+    #submit, button {
+        font-size: 0.6rem;
         min-width: 70%;
         max-height: 80%;
         margin-top: 10px;
     }
-
-    h1 {
-        font-size: 2.5rem;
-    }
-    
-    #form-container {
-        font-size: 1.5rem;
-    }
-
     input[type="text"], input[type="password"] {
         font-size: 1rem;
-        max-width: 50%;
+        max-width: 60%;
         padding-bottom: 2px;
     }
-
+    #submit-signup{
+        min-width: 100%;
+    }
     h3 {
-        font-size: 1rem;
-    }
-
-    #submit {
-        width: 100%;
-    }
-
-    #signed {
-        font-size: 1rem;
+        font-size: 3.5vw;
     }
 }
 
