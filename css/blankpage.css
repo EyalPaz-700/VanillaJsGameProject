@@ -1,0 +1,14 @@
+* {
+    overflow: hidden;
+}
+
+#container-work-in-progress, #working {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#working {
+    font-size: 1.5em;
+}
