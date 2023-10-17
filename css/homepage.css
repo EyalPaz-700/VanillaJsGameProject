@@ -31,7 +31,7 @@
     margin: 3%;
     padding: 10%;
     text-align: center;
-    font-size: 1em;
+    font-size: 1.5vw;
 }
 
 @media only screen and (max-width: 850px) {
@@ -42,6 +42,10 @@
         border-radius: 10%;
     }
 
+    #games {
+        font-size: 3rem;
+    }
+
     #game-container {
         justify-content: start;
         padding-left: 10%;
@@ -49,10 +53,11 @@
 
     .game-name {
         padding: 5%;
+        font-size: 1.2rem;
     }
   }
 
-  @media only screen and (max-width: 400px) {
+@media only screen and (max-width: 600px) {
     .game {
         width: 35%;
         height: 30%;

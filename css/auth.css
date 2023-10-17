@@ -24,10 +24,13 @@ form {
     align-items: center;
     justify-content: center;
 }
-input[type="button"] {
+
+input[type="button"], button {
     color : #FCF0CC;
-    width: 50%;
+    width: 30%;
+    height: 100%;
     background-color: #465362;
+    margin: 2%
 }
 
 
@@ -57,3 +60,72 @@ form div div {
 form div div div {
     flex-basis: 20%;
 }
+
+#form-container {
+    margin-top: 10vh;
+}
+
+#signed a{
+    color: black;
+    text-decoration: underline;
+}
+
+
+@media only screen and (max-width: 850px) {
+    input[type="button"], button {
+        font-size: 1.5rem;
+        min-width: 70%;
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+    
+    #form-container {
+        font-size: 1.5rem;
+    }
+
+    input[type="text"], input[type="password"] {
+        font-size: 1.5rem;
+        max-width: 70%;
+        padding-bottom: 5px;
+    }
+
+}
+
+
+@media only screen and (max-width: 600px) {
+    input[type="button"], button {
+        font-size: 0.9rem;
+        min-width: 70%;
+        max-height: 80%;
+        margin-top: 10px;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+    
+    #form-container {
+        font-size: 1.5rem;
+    }
+
+    input[type="text"], input[type="password"] {
+        font-size: 1rem;
+        max-width: 50%;
+        padding-bottom: 2px;
+    }
+
+    h3 {
+        font-size: 1rem;
+    }
+
+    #submit {
+        width: 100%;
+    }
+
+    #signed {
+        font-size: 1rem;
+    }
+}
+
