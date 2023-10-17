@@ -3,6 +3,8 @@ let board = document.querySelector('.board')
 
 const whiteCircle = "../media/white-circle.svg"
 const blackCircle = "../media/black-circle.svg"
+const blackQueen = "../media/black-queen.svg"
+const whiteQueen =  "../media/white-queen.svg"
 
 let moveCount = 0
 let routes = []
@@ -55,7 +57,6 @@ function initBoard(){
 
 function checkValidity(func) {
     return function() {
-        
         if ((this.firstElementChild.src.includes('white') && moveCount % 2 === 0) ||
             (this.firstElementChild.src.includes('black') && moveCount % 2 === 1)) {
             resetAvailableMoves()
@@ -121,7 +122,11 @@ function resetOnClicks(){
 
 function movePiece(){
     resetOnClicks()
-    availableMoves(this)
+    if (this.classList.contains('king')){
+        availableMovesKing(this)}
+    else{
+        availableMoves(this)
+    }
     this.classList.add('clicked')
     const location = getLocation(this)
     const row = location[0]
@@ -129,61 +134,127 @@ function movePiece(){
     routes.forEach(route => {
         const lastPieceOfRoute = getPiece(parseInt(route[route.length - 1] / 10),route[route.length - 1] % 10)
         lastPieceOfRoute.classList.add('available-move')
-        if (distanceFromPiece(this,lastPieceOfRoute) > Math.sqrt(2) ){
         lastPieceOfRoute.onclick = () => {
-            moveCount++;
-            route.slice(0,route.length).forEach( (pieceInRoute,index) => {
-                if (index === 0) {
-                    pieceInRoute = getPiece( (parseInt(pieceInRoute / 10) + row) / 2, (pieceInRoute % 10 + column) / 2)
-                }
-                else {
-                    pieceInRoute = getPiece((getLocationOurForm(pieceInRoute)[0] + getLocationOurForm(route[index-1])[0]) / 2, (getLocationOurForm(pieceInRoute)[1] + getLocationOurForm(route[index-1])[1]) / 2)
-                }
-                pieceInRoute.firstElementChild.src = ' '
-                pieceInRoute.onclick = null
-                pieceInRoute.classList.remove('piece')
-             
+            if (distanceFromPiece(this,lastPieceOfRoute) > Math.sqrt(2) ){ 
+                route.slice(0,route.length).forEach( (pieceInRoute,index) => {
+                    if (index === 0) {
+                    if (!this.classList.contains('king')) {
+                        pieceInRoute = getPiece( (parseInt(pieceInRoute / 10) + row) / 2, (pieceInRoute % 10 + column) / 2)}
+                        else {
+                            pieceInRoute = getPiece(parseInt(pieceInRoute / 10), pieceInRoute % 10)
+                        }
+                    }
+                    else {
+                        pieceInRoute = getPiece((getLocationOurForm(pieceInRoute)[0] + getLocationOurForm(route[index-1])[0]) / 2, (getLocationOurForm(pieceInRoute)[1] + getLocationOurForm(route[index-1])[1]) / 2)
+                    }
+                    pieceInRoute.firstElementChild.src = ' '
+                    pieceInRoute.classList.remove('piece')
+                
+                })
             }
-            )
-            activePiece = lastPieceOfRoute
-            activePiece.firstElementChild.src = this.firstElementChild.src
-            activePiece.onclick = this.onclick
-            activePiece.classList.add('piece')
-            this.firstElementChild.src = ' '
-            this.onclick = null
-            resetAvailableMoves()
-            resetOnClicks()
-            checkEndGame()
+            makeMove(this,lastPieceOfRoute)
+           
         }
-    }
-        else {
-            lastPieceOfRoute.onclick = () => {
-            moveCount++;
-            lastPieceOfRoute.onclick = this.onclick
-            lastPieceOfRoute.classList.add('piece')
-            lastPieceOfRoute.firstElementChild.src = this.firstElementChild.src
-            this.onclick = null
-            this.firstElementChild.src = ' '
-            resetAvailableMoves()
-            resetOnClicks()
-            checkEndGame()
-
-            }
-        }
+        })
  }
-    )
 
+
+function makeMove(piece,lastPieceOfRoute){
+    moveCount++;
+    lastPieceOfRoute.onclick = piece.onclick
+    lastPieceOfRoute.classList = piece.classList
+    if (checkRegularPiece(piece) && (reachedLastRow(piece,lastPieceOfRoute))){
+        lastPieceOfRoute.firstElementChild.src = getLocation(lastPieceOfRoute)[0] === 1 ? whiteQueen : blackQueen
+        lastPieceOfRoute.classList.add('king')
+    }
+    else {
+    lastPieceOfRoute.firstElementChild.src = piece.firstElementChild.currentSrc}
+    piece.onclick = null
+    piece.firstElementChild.src = ' '
+    resetAvailableMoves()
+    resetOnClicks()
+    checkEndGame()
 }
 
-function queenMove(){
-    const location = getLocation(this)
-    const color = getColor(this)
+function checkRegularPiece(piece){
+    return !piece.classList.contains('king')
+}
+
+function reachedLastRow(piece,lastPieceOfRoute){
+    const pieceLocation = getLocation(piece)
+    const pieceColor = getColor(pieceLocation[0],pieceLocation[1])
+    return (pieceColor === 'white' && getLocation(lastPieceOfRoute)[0] === 1) || 
+    (pieceColor === 'black' && getLocation(lastPieceOfRoute)[0] === 8)
+}
+
+function availableMovesKing(piece){
+    routes = []
+    const location = getLocation(piece)
     const row = location[0]
     const column = location[1]
-    routes = []
-    for (let i = row, j = column; i < 9 && j < 9; ++i, ++j){
-        
+    let previousRow = row
+    let previousColumn = column
+    const color = getColor(row,column)
+    function canEat(newRow,newColumn,route = []) {
+            if (route.includes((newRow)* 10 + newColumn)){
+                return
+            }
+            if (checkEmptyCell(newRow,newColumn) && !checkEmptyCell((newRow + previousRow) / 2, (previousColumn + newColumn) / 2) && (color !== getColor( (newRow + previousRow) / 2, (previousColumn + newColumn) / 2))){
+                route.push(newRow* 10 + newColumn)
+                routes.push(route)
+                previousColumn = newColumn
+                previousRow = newRow
+                canEat(newRow+2,newColumn+2,[...route])
+                canEat(newRow+2,newColumn-2,[...route])
+                canEat(newRow-2,newColumn-2,[...route])
+                canEat(newRow-2,newColumn+2,[...route])
+            }
     }
+    
+    for (let newRow = row + 1,newColumn = column + 1; newRow <=8 && newColumn <=8; newRow++, newColumn++) {
+        previousRow = newRow - 1
+        previousColumn = newColumn - 1
+            if (checkEmptyCell(newRow,newColumn)) {
+                routes.push([newRow * 10 + newColumn])
+            } else {
+                canEat(newRow + 1,newColumn + 1,[previousRow* 10 +previousColumn])
+                break
+            }
+    }
+
+    for (let newRow = row - 1,newColumn = column + 1 ; newRow >= 1 && newColumn <=8; newRow--, newColumn++) {
+        previousRow = newRow + 1
+        previousColumn = newColumn - 1
+            if (checkEmptyCell(newRow,newColumn)) {
+                routes.push([newRow * 10 + newColumn])
+            } else {
+                canEat(newRow - 1,newColumn + 1,[previousRow* 10 +previousColumn])
+                break
+            }
+    }
+
+    for (let newRow = row + 1, newColumn = column - 1; newRow <=8 && newColumn >= 1; newRow++, newColumn--) {
+        previousRow = newRow - 1
+        previousColumn = newColumn + 1
+            if (checkEmptyCell(newRow,newColumn)) {
+                routes.push([newRow * 10 + newColumn])
+            } else {
+                canEat(newRow + 1,newColumn - 1, [previousRow* 10 +previousColumn])
+                break
+            }
+    }
+
+    for (let newRow = row - 1,  newColumn = column - 1; newRow >= 1 && newColumn >= 1; newRow--, newColumn--) {
+        previousRow = newRow + 1
+        previousColumn = newColumn + 1
+        if (checkEmptyCell(newRow,newColumn)) {
+                routes.push([newRow * 10 + newColumn])
+            } else {
+                canEat(newRow - 1,newColumn - 1,[previousRow* 10 +previousColumn])
+                break
+            }
+    }
+    return routes
 }
 
 function availableMoves(piece) {
@@ -306,11 +377,9 @@ function resetBoard(){
     initBoard()
     initOnClicks()
     moveCount = 0
-
 }
 
 function initOnClicks(){
-    debugger
     const pieces = document.querySelectorAll('.piece')
 pieces.forEach((piece) => {
     piece.onclick = checkValidity(movePiece)
