@@ -8,9 +8,8 @@
     display: flex;
     flex-wrap: wrap;
     width: 80vw;
-    height: 90vh;
-    border-radius: 10%;
-    justify-content: space-between;
+    height: 70vh;
+    justify-content: space-evenly;
     margin: auto;
 }
 
@@ -18,7 +17,6 @@
     width: 15%;
     height: 20%;
     margin: 3%;
-    border-radius: 10%;
 }
 
 .game-image {
@@ -29,10 +27,39 @@
 }
 
 .game-name {
-    width: 80%;
     height: 20%;
     margin: 3%;
     padding: 10%;
     text-align: center;
-    font-size: 1em;
+    font-size: 1.5vw;
 }
+
+@media only screen and (max-width: 850px) {
+    .game {
+        width: 25%;
+        height: 20%;
+        margin: 3%;
+        border-radius: 10%;
+    }
+
+    #games {
+        font-size: 3rem;
+    }
+
+    #game-container {
+        justify-content: start;
+        padding-left: 10%;
+    }
+
+    .game-name {
+        padding: 5%;
+        font-size: 1.2rem;
+    }
+  }
+
+@media only screen and (max-width: 600px) {
+    .game {
+        width: 35%;
+        height: 30%;
+    }
+  }

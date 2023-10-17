@@ -1,0 +1,17 @@
+* {
+    overflow: hidden;
+}
+#container-work-in-progress{
+    height: 90vh;
+    width: 100%;
+}
+#container-work-in-progress, #working, img{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#working {
+    font-size: 1.5em;
+}
