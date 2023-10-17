@@ -9,6 +9,8 @@ const whiteQueen =  "../media/white-queen.svg"
 let moveCount = 0
 let routes = []
 let activePiece = null
+const gameModeInput = document.getElementById('game-mode')
+let gameMode =  Array.from(document.getElementsByName('game-mode')).filter( x => x.checked)[0].value === "hard" ? 1 : 0 
 
 function initBoard(){
     const div = document.createElement('div')
@@ -133,7 +135,9 @@ function movePiece(){
     const column = location[1]
     routes.forEach(route => {
         const lastPieceOfRoute = getPiece(parseInt(route[route.length - 1] / 10),route[route.length - 1] % 10)
-        lastPieceOfRoute.classList.add('available-move')
+        if (gameMode === 0){
+            lastPieceOfRoute.classList.add('available-move')
+        }
         lastPieceOfRoute.onclick = () => {
             if (distanceFromPiece(this,lastPieceOfRoute) > Math.sqrt(2) ){ 
                 route.slice(0,route.length).forEach( (pieceInRoute,index) => {
@@ -192,65 +196,53 @@ function availableMovesKing(piece){
     const location = getLocation(piece)
     const row = location[0]
     const column = location[1]
-    let previousRow = row
-    let previousColumn = column
     const color = getColor(row,column)
-    function canEat(newRow,newColumn,route = []) {
+    function canEat(newRow,newColumn,previousRow,previousColumn,route = []) {
             if (route.includes((newRow)* 10 + newColumn)){
                 return
             }
             if (checkEmptyCell(newRow,newColumn) && !checkEmptyCell((newRow + previousRow) / 2, (previousColumn + newColumn) / 2) && (color !== getColor( (newRow + previousRow) / 2, (previousColumn + newColumn) / 2))){
                 route.push(newRow* 10 + newColumn)
                 routes.push(route)
-                previousColumn = newColumn
-                previousRow = newRow
-                canEat(newRow+2,newColumn+2,[...route])
-                canEat(newRow+2,newColumn-2,[...route])
-                canEat(newRow-2,newColumn-2,[...route])
-                canEat(newRow-2,newColumn+2,[...route])
+                canEat(newRow+2,newColumn+2,newRow,newColumn,[...route])
+                canEat(newRow+2,newColumn-2,newRow,newColumn,[...route])
+                canEat(newRow-2,newColumn-2,newRow,newColumn,[...route])
+                canEat(newRow-2,newColumn+2,newRow,newColumn,[...route])
             }
     }
     
     for (let newRow = row + 1,newColumn = column + 1; newRow <=8 && newColumn <=8; newRow++, newColumn++) {
-        previousRow = newRow - 1
-        previousColumn = newColumn - 1
             if (checkEmptyCell(newRow,newColumn)) {
                 routes.push([newRow * 10 + newColumn])
             } else {
-                canEat(newRow + 1,newColumn + 1,[previousRow* 10 +previousColumn])
+                canEat(newRow + 1,newColumn + 1,newRow - 1,newColumn - 1,[(newRow -1)* 10 +newColumn - 1 ])
                 break
             }
     }
 
     for (let newRow = row - 1,newColumn = column + 1 ; newRow >= 1 && newColumn <=8; newRow--, newColumn++) {
-        previousRow = newRow + 1
-        previousColumn = newColumn - 1
             if (checkEmptyCell(newRow,newColumn)) {
                 routes.push([newRow * 10 + newColumn])
             } else {
-                canEat(newRow - 1,newColumn + 1,[previousRow* 10 +previousColumn])
+                canEat(newRow - 1,newColumn + 1, newRow + 1,newColumn - 1,[(newRow +1)* 10 +newColumn - 1 ])
                 break
             }
     }
 
     for (let newRow = row + 1, newColumn = column - 1; newRow <=8 && newColumn >= 1; newRow++, newColumn--) {
-        previousRow = newRow - 1
-        previousColumn = newColumn + 1
             if (checkEmptyCell(newRow,newColumn)) {
                 routes.push([newRow * 10 + newColumn])
             } else {
-                canEat(newRow + 1,newColumn - 1, [previousRow* 10 +previousColumn])
+                canEat(newRow + 1,newColumn - 1, newRow - 1,newColumn + 1,[(newRow -1)* 10 +newColumn + 1 ])
                 break
             }
     }
 
     for (let newRow = row - 1,  newColumn = column - 1; newRow >= 1 && newColumn >= 1; newRow--, newColumn--) {
-        previousRow = newRow + 1
-        previousColumn = newColumn + 1
         if (checkEmptyCell(newRow,newColumn)) {
                 routes.push([newRow * 10 + newColumn])
             } else {
-                canEat(newRow - 1,newColumn - 1,[previousRow* 10 +previousColumn])
+                canEat(newRow - 1,newColumn - 1,newRow + 1,newColumn + 1,[(newRow +1)* 10 +newColumn + 1 ])
                 break
             }
     }
@@ -271,8 +263,8 @@ function availableMoves(piece) {
         if (checkEmptyCell(row + 1,column - 1)) {
             routes.push([(row + 1 )* 10 + column - 1])
         }
-        canEat(row+2,column+2)
-        canEat(row+2,column-2)
+        canEat(row+2,column+2,previousRow,previousColumn)
+        canEat(row+2,column-2,previousRow,previousColumn)
     }
     else {
         if (checkEmptyCell(row - 1,column + 1)) {
@@ -282,11 +274,11 @@ function availableMoves(piece) {
             routes.push([(row - 1 )* 10 + column - 1])
         }
         
-        canEat(row-2,column-2)
-        canEat(row-2,column+2)
+        canEat(row-2,column-2,previousRow,previousColumn)
+        canEat(row-2,column+2,previousRow,previousColumn)
     }
 
-    function canEat(newRow,newColumn,route = []) {
+    function canEat(newRow,newColumn,previousRow, previousColumn,route = []) {
 
             if (route.includes((newRow)* 10 + newColumn)){
                 return
@@ -294,12 +286,12 @@ function availableMoves(piece) {
             if (checkEmptyCell(newRow,newColumn) && !checkEmptyCell((newRow + previousRow) / 2, (previousColumn + newColumn) / 2) && (getColor(row,column) !== getColor( (newRow + previousRow) / 2, (previousColumn + newColumn) / 2))){
                 route.push(newRow* 10 + newColumn)
                 routes.push(route)
-                previousColumn = newColumn
-                previousRow = newRow
-                canEat(newRow+2,newColumn+2,[...route])
-                canEat(newRow+2,newColumn-2,[...route])
-                canEat(newRow-2,newColumn-2,[...route])
-                canEat(newRow-2,newColumn+2,[...route])
+                const previousColumn = newColumn
+                const previousRow = newRow
+                canEat(newRow+2,newColumn+2,previousRow,previousColumn,[...route])
+                canEat(newRow+2,newColumn-2,previousRow,previousColumn,[...route])
+                canEat(newRow-2,newColumn-2,previousRow,previousColumn,[...route])
+                canEat(newRow-2,newColumn+2,previousRow,previousColumn,[...route])
             }
     }
 }
@@ -321,20 +313,19 @@ function checkEndGame() {
 
 function gameEnd() {
     const message = document.querySelector('.game-started')
-        if (moveCount % 2 == 0) {
-            message.classList.remove('game-started')
-            message.classList.add('game-ended')
+    message.classList.remove('game-started')
+    message.classList.add('game-ended')
+    if (moveCount % 2 == 1) {
             message.textContent += "white wins";
             increaseScore('white',1)
-        } else {
+    } 
+    else {
             message.textContent += "black wins";
             increaseScore('black',1)
 
         }
 
 }
-
-
 
 function getUser(){
     const users = JSON.parse(localStorage.getItem('users'))
@@ -349,24 +340,26 @@ function getUser(){
     return indexUser
 }
 function getScore(color){
-    return JSON.parse(localStorage.getItem('users'))[getUser()][`#${color}-win-count`]
+    return JSON.parse(localStorage.getItem('users'))[getUser()][`${color}WinCount`]
 }
 
-function increaseScore(color, amount = 0){
+function increaseScore(color, amount = 0,initial = false){
     const scoreElement = document.querySelector(`#${color}-win-count`)
     const score = scoreElement.textContent.trim().split(':')
     scoreElement.textContent = score[0] + ': ' +  (parseInt(score[1].trim())+amount)
+    if (!initial){
     let currentUserIndex = getUser()
     const users = JSON.parse(localStorage.getItem('users'))
     const user = users[currentUserIndex]
     user[`${color}WinCount`]+= amount
     localStorage.setItem('users',JSON.stringify(users))
+    }
 }
 
 
 function setInitialScores(){
-    increaseScore('black',getScore('black'))
-    increaseScore('white',getScore('white'))
+    increaseScore('black',getScore('black'),true)
+    increaseScore('white',getScore('white'),true)
 }
 
 function resetBoard(){
@@ -387,6 +380,10 @@ pieces.forEach((piece) => {
 }
 
 function gameStart(){
+    gameModeInput.addEventListener('change', () => {
+        gameMode = !gameMode 
+        resetBoard()
+    })
     initBoard()
     setInitialScores()
     initOnClicks()
@@ -394,5 +391,6 @@ function gameStart(){
     const resetGame = document.getElementById('reset-game')
     resetGame.addEventListener('click', resetBoard)
 }
+
 
 gameStart()
