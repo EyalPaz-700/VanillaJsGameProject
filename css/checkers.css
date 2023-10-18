@@ -81,10 +81,22 @@ h1 {
     transform: translateX(-50%);
     left: 50%;
 }
+
 #hard {
     top: 60%;
 }
 
+#turn-container {
+    width: fit-content;
+    margin-left: 47%;
+}
+
+#turn {
+    text-align: center;
+    padding: 5px;
+    background-color: #1B2432;
+    color: white;
+}
 
 #reset-game{
     width: fit-content;
@@ -168,7 +180,9 @@ h1 {
         width: 20%;
     }
 
-
+    #turn-container {
+        margin-left: 45%;
+    }
 
     #hard, #easy {
         left: 65%;
@@ -201,6 +215,10 @@ h1 {
     
     #hard, #easy span {
         font-size: 0.9rem;
+    }
+
+    #turn-container {
+        margin-left: 42%;
     }
 
     .checkers-menu {
