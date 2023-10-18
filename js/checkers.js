@@ -55,6 +55,7 @@ function initBoard(){
     }
         board.appendChild(tempRow)
     }
+    whosTurn();
 }
 
 function checkValidity(func) {
@@ -67,6 +68,13 @@ function checkValidity(func) {
     };
 }
 
+function whosTurn () {
+    if (moveCount % 2 === 1) {
+        document.querySelector("#turn").textContent = "black's turn"
+    } else {
+        document.querySelector("#turn").textContent = "White's turn"
+    }
+}
 
 function getColor(row, column){
     const cell = document.querySelector(`#cell-${row}-${column}`)
@@ -178,6 +186,7 @@ function makeMove(piece,lastPieceOfRoute){
     resetAvailableMoves()
     resetOnClicks()
     checkEndGame()
+    whosTurn();
 }
 
 function checkRegularPiece(piece){
