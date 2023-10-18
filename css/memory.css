@@ -1,8 +1,12 @@
 
 h1 {
     text-align: center;
-    margin-bottom: 1%;
+    margin-bottom: 0.5%;
     font-size: 4vw;
+}
+
+h2 {
+  font-size: 2vw;
 }
 .button-div{
     position: relative;
@@ -22,7 +26,7 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 70vh;
+  min-height: 62vh;
 }
 .wrapper{
   padding: 25px;
@@ -72,7 +76,15 @@ h1 {
   transform-style: preserve-3d;
   height: calc(100% / 8 - 10px);
   width: calc(100% / 4 - 10px);
+ 
 }
+.cards.cards-32 .card .back-view img{
+  max-width: 30px;
+}
+.cards.cards-28 .card .back-view img{
+  max-width: 35px;
+}
+
 .card.shake{
   animation: shake 0.35s ease-in-out;
 }
@@ -119,10 +131,16 @@ h1 {
 .card.flip .front-view{
   transform: rotateY(180deg);
 }
+.board-size-input{
+  text-align: center;
+}
 
 @media screen and (max-width: 700px) {
   h1 {
     font-size: 6vw;
+  }
+  h2{
+    font-size: 3vw;
   }
   #start-game{
     width: 20vw;
@@ -149,6 +167,9 @@ h1 {
     h1 {
         font-size: 8vw;
       }
+    h2 {
+      font-size: 4vw;
+    }
   .cards{
     height: 300px;
     width: 300px;

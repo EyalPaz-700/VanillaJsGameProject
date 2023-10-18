@@ -1,8 +1,12 @@
 const cardList = document.querySelector(".cards");
 let cards = undefined;
 const startGameBtn = document.getElementById("start-game");
-
+const sizeButtons = document.querySelectorAll('.board-size-input input')
 startGameBtn.addEventListener("click",startGame)
+sizeButtons.forEach(el => {
+    el.addEventListener('change',changeSize)
+})
+
 
 let matched = 0;
 let cardOne, cardTwo;
@@ -33,9 +37,16 @@ function initCards(){
     cards = document.querySelectorAll(".card");
 }
 
+function changeSize(){
+    cardList.classList.remove(`cards-${cardNumber}`)
+    cardNumber = parseInt(this.value)
+    cardList.innerHTML = ' '
+    initCards()
+    startGame()
+}
+
 function flipCard({target: clickedCard}) {
     if(cardOne !== clickedCard && !disableDeck) {
-        debugger
         clickedCard.classList.add("flip");
         if(!cardOne) {
             return cardOne = clickedCard;
