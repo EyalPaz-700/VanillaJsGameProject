@@ -7,7 +7,7 @@ h1 {
 
 .board {
    position: relative;
-   height: 75vh;
+   height: 72vh;
    flex-basis : 50vw;
    background-color: #FCF0CC;
 }
@@ -120,6 +120,7 @@ h1 {
 }
 .game-ended{
     text-align: center;
+
     position: absolute;
     display: block;
     left: 55%;
