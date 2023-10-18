@@ -41,14 +41,36 @@ h1 {
   flex-wrap: wrap;
   justify-content: space-between;
 }
-.cards .card{
+.cards .card {
   cursor: pointer;
   list-style: none;
   user-select: none;
   position: relative;
   perspective: 1000px;
+}
+.cards.cards-16 .card{
   transform-style: preserve-3d;
   height: calc(100% / 4 - 10px);
+  width: calc(100% / 4 - 10px);
+}
+.cards.cards-20 .card{
+  transform-style: preserve-3d;
+  height: calc(100% / 4 - 10px);
+  width: calc(100% / 5 - 10px);
+}
+.cards.cards-24 .card{
+  transform-style: preserve-3d;
+  height: calc(100% / 6 - 10px);
+  width: calc(100% / 4 - 10px);
+}
+.cards.cards-28 .card{
+  transform-style: preserve-3d;
+  height: calc(100% / 8 - 10px);
+  width: calc(100% / 4 - 10px);
+}
+.cards.cards-32 .card{
+  transform-style: preserve-3d;
+  height: calc(100% / 8 - 10px);
   width: calc(100% / 4 - 10px);
 }
 .card.shake{

@@ -1,4 +1,5 @@
-const cards = document.querySelectorAll(".card");
+const cardList = document.querySelector(".cards");
+let cards = undefined;
 const startGameBtn = document.getElementById("start-game");
 
 startGameBtn.addEventListener("click",startGame)
@@ -6,9 +7,35 @@ startGameBtn.addEventListener("click",startGame)
 let matched = 0;
 let cardOne, cardTwo;
 let disableDeck = false;
+let cardNumber = 16
+
+function initCards(){
+    for (let i = 1; i <= cardNumber; ++i){
+        const li = document.createElement('li')
+    li.classList.add('card')
+    const divFront = document.createElement('div')
+    divFront.classList.add('view','front-view')
+    const divBack = document.createElement('div')
+    divBack.classList.add('view','back-view')
+    const queImg =  document.createElement('img')
+    queImg.src = "../media/que_icon.svg" 
+    queImg.alt = "icon"
+    let frontImg = document.createElement('img')
+    frontImg.alt = "card-img"
+    divBack.appendChild(frontImg)
+    divFront.appendChild(queImg)
+    li.appendChild(divFront)
+    li.appendChild(divBack)
+        frontImg.src = `../media/img-${i % 2 ===0 ? parseInt(i / 2) : parseInt(i / 2) + 1}.png`
+        cardList.appendChild(li)
+    }
+    cardList.classList.add(`cards-${cardNumber}`)
+    cards = document.querySelectorAll(".card");
+}
 
 function flipCard({target: clickedCard}) {
     if(cardOne !== clickedCard && !disableDeck) {
+        debugger
         clickedCard.classList.add("flip");
         if(!cardOne) {
             return cardOne = clickedCard;
@@ -24,8 +51,8 @@ function flipCard({target: clickedCard}) {
 function matchCards(img1, img2) {
     if(img1 === img2) {
         matched++;
-        if(matched == 8) {
-            endGame()
+        if(matched == cardNumber / 2) {
+            endGame
         }
         cardOne.removeEventListener("click", flipCard);
         cardTwo.removeEventListener("click", flipCard);
@@ -49,7 +76,8 @@ function shuffleCards() {
     matched = 0;
     disableDeck = false;
     cardOne = cardTwo = "";
-    let arr = [1, 2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8];
+    let arr = [...Array(cardNumber / 2).keys()].map(x => x + 1)
+    arr  = [...arr,...arr]
     arr.sort(() => Math.random() > 0.5 ? 1 : -1);
     cards.forEach((card, i) => {
         card.classList.remove("flip");
@@ -71,5 +99,7 @@ function startGame(){
         card.addEventListener("click", flipCard);
     });
 }
+
+initCards()
 
 
